@@ -1,11 +1,21 @@
-use crate::{Cache, CacheError, CacheKey};
+use crate::{Cache, CacheKey, CacheResult};
 
-mod memory;
+mod standalone;
 
-pub use memory::SimpleMemoryCache;
+pub use standalone::SimpleMemoryCache;
 
 pub trait CacheBackend<T: Cache> {
-    fn extract(&mut self, key: CacheKey) -> Option<T>;
+    /// Obtains entity from cache if present.
+    fn retrieve(&self, key: &CacheKey) -> CacheResult<Option<&T>>;
 
-    fn store(&mut self, key: CacheKey, entity: T) -> Result<(), CacheError>;
+    /// Stores entity in cache, if entity already present in cache
+    /// the behaviour must be defined at the implementation level.
+    fn store(&mut self, key: &CacheKey, entity: T) -> CacheResult<()>;
+
+    /// Updates entity in cache, implementors can choose if they want to allow
+    /// updating entities not present in the cache or not.
+    fn update(&mut self, key: &CacheKey, entity: T) -> CacheResult<()>;
+
+    /// Removes entity from cache
+    fn expire(&mut self, key: &CacheKey) -> CacheResult<()>;
 }
