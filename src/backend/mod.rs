@@ -1,5 +1,6 @@
 use crate::{Cache, CacheKey, CacheResult};
 
+mod distributed;
 mod standalone;
 
 pub use standalone::SimpleMemoryCache;

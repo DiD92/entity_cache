@@ -3,6 +3,8 @@ use std::collections::hash_map::Entry;
 
 use std::collections::HashMap;
 
+// TODO: Implement thread friendly memory cache
+
 /// Most simplistic implementation of an in-memory cache, with neither multithreading nor
 /// capacity control.
 pub type SimpleMemoryCache<T> = HashMap<CacheKey, T>;
